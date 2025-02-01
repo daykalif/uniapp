@@ -2,6 +2,6 @@
   "navigationBarTitleText": "",
   "navigationBarBackgroundColor": "#FFFFFF",
   "usingComponents": {
-    "navbar": "../../components/navbar/navbar"
+    "custom_comp": "../../components/custom_comp/custom_comp"
   }
 }

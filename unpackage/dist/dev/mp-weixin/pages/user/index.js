@@ -2,12 +2,12 @@
 const common_vendor = require("../../common/vendor.js");
 if (!Array) {
   const _component_my_component = common_vendor.resolveComponent("my-component");
-  const _easycom_navbar2 = common_vendor.resolveComponent("navbar");
-  (_component_my_component + _easycom_navbar2)();
+  const _easycom_custom_comp2 = common_vendor.resolveComponent("custom_comp");
+  (_component_my_component + _easycom_custom_comp2)();
 }
-const _easycom_navbar = () => "../../components/navbar/navbar.js";
+const _easycom_custom_comp = () => "../../components/custom_comp/custom_comp.js";
 if (!Math) {
-  _easycom_navbar();
+  _easycom_custom_comp();
 }
 const _sfc_main = {
   __name: "index",

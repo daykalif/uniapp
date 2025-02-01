@@ -3,9 +3,9 @@
 		用户页面
 		<my-component />
 
-		<navbar name="组件属性传递" :content="data" @changeData="changeValueData">
-			<view>我是插槽的内容</view>
-		</navbar>
+		<custom_comp name="组件属性传递" :content="data" @changeData="changeValueData">
+			<view>我是插槽的内容2</view>
+		</custom_comp>
 	</view>
 </template>
 
