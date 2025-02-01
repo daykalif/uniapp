@@ -6784,9 +6784,9 @@ function initOnError() {
   };
 }
 function initRuntimeSocketService() {
-  const hosts = "127.0.0.1,192.168.50.53,10.211.55.2,10.37.129.2";
+  const hosts = "127.0.0.1,192.168.31.153";
   const port = "8090";
-  const id = "mp-weixin_eqC-Im";
+  const id = "mp-weixin_yIl-Bi";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -6854,6 +6854,13 @@ function initMiniProgramGlobalFlag() {
   }
 }
 initRuntimeSocketService();
+const _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};
 function initVueIds(vueIds, mpInstance) {
   if (!vueIds) {
     return;
@@ -7715,6 +7722,7 @@ const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
   !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
 };
 const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
+exports._export_sfc = _export_sfc;
 exports.computed = computed;
 exports.createSSRApp = createSSRApp;
 exports.f = f;
