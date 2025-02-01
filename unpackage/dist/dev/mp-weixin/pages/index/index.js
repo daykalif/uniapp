@@ -1,6 +1,14 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const common_assets = require("../../common/assets.js");
+if (!Array) {
+  const _easycom_navbar2 = common_vendor.resolveComponent("navbar");
+  _easycom_navbar2();
+}
+const _easycom_navbar = () => "../../components/navbar/navbar.js";
+if (!Math) {
+  _easycom_navbar();
+}
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -16,7 +24,7 @@ const _sfc_main = {
       }
     ]);
     common_vendor.onLoad(() => {
-      common_vendor.index.__f__("log", "at pages/index/index.vue:41", "onLoad生命周期");
+      common_vendor.index.__f__("log", "at pages/index/index.vue:43", "onLoad生命周期");
     });
     const handleClick = () => {
       list.forEach((item) => {

@@ -1,5 +1,7 @@
 <template>
 	<view class="content">
+		<navbar></navbar>
+		
 		<image class="logo" src="/static/logo.png"></image>
 		<view class="text-area">
 			<text class="title">{{title}}</text>

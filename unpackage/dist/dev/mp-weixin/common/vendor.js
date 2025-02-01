@@ -68,8 +68,8 @@ const capitalize = cacheStringFunction((str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 });
 const toHandlerKey = cacheStringFunction((str) => {
-  const s = str ? `on${capitalize(str)}` : ``;
-  return s;
+  const s2 = str ? `on${capitalize(str)}` : ``;
+  return s2;
 });
 const hasChanged = (value, oldValue) => !Object.is(value, oldValue);
 const invokeArrayFns$1 = (fns, arg) => {
@@ -88,6 +88,36 @@ const looseToNumber = (val) => {
   const n = parseFloat(val);
   return isNaN(n) ? val : n;
 };
+function normalizeStyle(value) {
+  if (isArray(value)) {
+    const res = {};
+    for (let i = 0; i < value.length; i++) {
+      const item = value[i];
+      const normalized = isString(item) ? parseStringStyle(item) : normalizeStyle(item);
+      if (normalized) {
+        for (const key in normalized) {
+          res[key] = normalized[key];
+        }
+      }
+    }
+    return res;
+  } else if (isString(value) || isObject(value)) {
+    return value;
+  }
+}
+const listDelimiterRE = /;(?![^(]*\))/g;
+const propertyDelimiterRE = /:([^]+)/;
+const styleCommentRE = /\/\*[^]*?\*\//g;
+function parseStringStyle(cssText) {
+  const ret = {};
+  cssText.replace(styleCommentRE, "").split(listDelimiterRE).forEach((item) => {
+    if (item) {
+      const tmp = item.split(propertyDelimiterRE);
+      tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
+    }
+  });
+  return ret;
+}
 const toDisplayString = (val) => {
   return isString(val) ? val : val == null ? "" : isArray(val) || isObject(val) && (val.toString === objectToString || !isFunction(val.toString)) ? JSON.stringify(val, replacer, 2) : String(val);
 };
@@ -5015,6 +5045,22 @@ function getCreateApp() {
     return my[method];
   }
 }
+function stringifyStyle(value) {
+  if (isString(value)) {
+    return value;
+  }
+  return stringify(normalizeStyle(value));
+}
+function stringify(styles) {
+  let ret = "";
+  if (!styles || isString(styles)) {
+    return ret;
+  }
+  for (const key in styles) {
+    ret += `${key.startsWith(`--`) ? key : hyphenate(key)}:${styles[key]};`;
+  }
+  return ret;
+}
 function vOn(value, key) {
   const instance = getCurrentInstance();
   const ctx = instance.ctx;
@@ -5143,6 +5189,7 @@ function vFor(source, renderItem) {
 }
 const o = (value, key) => vOn(value, key);
 const f = (source, renderItem) => vFor(source, renderItem);
+const s = (value) => stringifyStyle(value);
 const t = (val) => toDisplayString(val);
 const p = (props) => renderProps(props);
 function createApp$1(rootComponent, rootProps = null) {
@@ -6842,7 +6889,7 @@ function initOnError() {
 function initRuntimeSocketService() {
   const hosts = "127.0.0.1,192.168.31.153";
   const port = "8090";
-  const id = "mp-weixin_yIl-Bi";
+  const id = "mp-weixin_3WzgrO";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -7784,10 +7831,12 @@ exports.createSSRApp = createSSRApp;
 exports.f = f;
 exports.index = index;
 exports.o = o;
+exports.onBeforeMount = onBeforeMount;
 exports.onLoad = onLoad;
 exports.p = p;
 exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
+exports.s = s;
 exports.t = t;
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map
