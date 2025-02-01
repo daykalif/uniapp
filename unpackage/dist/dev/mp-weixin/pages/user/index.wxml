@@ -1,1 +1,1 @@
-<view> 用户页面 <my-component u-i="c55e3d1c-0" bind:__l="__l"/><navbar u-i="c55e3d1c-1" bind:__l="__l"/></view>
+<view> 用户页面 <my-component u-i="c55e3d1c-0" bind:__l="__l"/><navbar wx:if="{{b}}" u-s="{{['d']}}" bindchangeData="{{a}}" u-i="c55e3d1c-1" bind:__l="__l" u-p="{{b}}"><view>我是插槽的内容</view></navbar></view>

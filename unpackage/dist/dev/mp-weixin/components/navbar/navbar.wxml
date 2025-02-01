@@ -1,1 +1,1 @@
-<view> navbar组件 </view>
+<view> navbar组件 <view>组件的name属性：{{a}}</view><view>组件的content属性：{{b}}</view><slot></slot><button bindtap="{{c}}">修改</button></view>

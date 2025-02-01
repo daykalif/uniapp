@@ -2,20 +2,23 @@
 	<view>
 		用户页面
 		<my-component />
-		<navbar />
+
+		<navbar name="组件属性传递" :content="data" @changeData="changeValueData">
+			<view>我是插槽的内容</view>
+		</navbar>
 	</view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
+<script setup>
+	import {
+		ref
+	} from 'vue';
 
-			}
-		},
-		methods: {
+	// 定义响应式数据 data
+	const data = ref('动态数组');
 
-		}
+	const changeValueData = (val) => {
+		data.value = val;
 	}
 </script>
 
