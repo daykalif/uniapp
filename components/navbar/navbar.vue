@@ -1,20 +1,16 @@
 <template>
 	<view>
-		用户页面
-		<my-component />
-		<navbar />
+		navbar组件
 	</view>
 </template>
 
 <script>
 	export default {
+		name:"navbar",
 		data() {
 			return {
-
-			}
-		},
-		methods: {
-
+				
+			};
 		}
 	}
 </script>

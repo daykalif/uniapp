@@ -1,8 +1,6 @@
 <template>
 	<view>
-		用户页面
-		<my-component />
-		<navbar />
+		全局引入-component组件
 	</view>
 </template>
 
@@ -10,11 +8,11 @@
 	export default {
 		data() {
 			return {
-
+				
 			}
 		},
 		methods: {
-
+			
 		}
 	}
 </script>

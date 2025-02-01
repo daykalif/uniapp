@@ -17,8 +17,10 @@ const _sfc_main = {
     common_vendor.index.__f__("log", "at App.vue:10", "App Hide");
   }
 };
+const Component = () => "./mycomponents/component.js";
 function createApp() {
   const app = common_vendor.createSSRApp(_sfc_main);
+  app.component("my-component", Component);
   return {
     app
   };

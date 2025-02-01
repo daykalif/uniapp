@@ -6,6 +6,15 @@ const _sfc_main = {
   },
   methods: {}
 };
+if (!Array) {
+  const _component_my_component = common_vendor.resolveComponent("my-component");
+  const _easycom_navbar2 = common_vendor.resolveComponent("navbar");
+  (_component_my_component + _easycom_navbar2)();
+}
+const _easycom_navbar = () => "../../components/navbar/navbar.js";
+if (!Math) {
+  _easycom_navbar();
+}
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {};
 }
