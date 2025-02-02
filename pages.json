@@ -35,6 +35,20 @@
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path" : "pages/hospital/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/service/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 	],
 	"tabBar": {

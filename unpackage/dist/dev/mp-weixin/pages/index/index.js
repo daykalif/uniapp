@@ -14,6 +14,8 @@ const _sfc_main = {
   setup(__props) {
     const app = getApp();
     const bannerList = common_vendor.ref([]);
+    const nav2s = common_vendor.ref([]);
+    const navs = common_vendor.ref([]);
     common_vendor.onLoad(() => {
       app.globalData.utils.getUserInfo();
       app.globalData.utils.request({
@@ -31,12 +33,30 @@ const _sfc_main = {
             },
             success: (ress) => {
               bannerList.value = ress.data.data.slides;
-              common_vendor.index.__f__("log", "at pages/index/index.vue:75", bannerList.value, "ress");
+              nav2s.value = ress.data.data.nav2s;
+              navs.value = ress.data.data.navs;
+              common_vendor.index.__f__("log", "at pages/index/index.vue:105", bannerList.value, "ress");
             }
           });
         }
       });
     });
+    const jump = (nav, type) => {
+      if (nav.stype == 1) {
+        common_vendor.index.navigateTo({
+          url: nav.stype_link
+        });
+      }
+    };
+    const onNav2sTap = (e) => {
+      const nav = common_vendor.toRaw(nav2s.value)[e.currentTarget.dataset.index];
+      common_vendor.index.__f__("log", "at pages/index/index.vue:127", nav);
+      jump(nav);
+    };
+    const onNavsTap = (e) => {
+      const nav = common_vendor.toRaw(navs.value)[e.currentTarget.dataset.index];
+      jump(nav);
+    };
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_vendor.p({
@@ -50,6 +70,30 @@ const _sfc_main = {
           return {
             a: item.pic_image_url,
             b: item.id
+          };
+        })
+      } : {}, {
+        f: nav2s.value && nav2s.value.length > 0
+      }, nav2s.value && nav2s.value.length > 0 ? {
+        g: common_vendor.f(nav2s.value, (item, index, i0) => {
+          return {
+            a: item.pic_image_url,
+            b: index
+          };
+        }),
+        h: common_vendor.o(onNav2sTap, _ctx.idnex),
+        i: _ctx.idnex
+      } : {}, {
+        j: navs.value && navs.value.length > 0
+      }, navs.value && navs.value.length > 0 ? {
+        k: common_vendor.f(navs.value, (item, index, i0) => {
+          return {
+            a: item.pic_image_url,
+            b: common_vendor.t(item.title),
+            c: common_vendor.s("color" + (item.tcolor ? item.tcolor : "")),
+            d: common_vendor.o(onNavsTap, index),
+            e: index,
+            f: index
           };
         })
       } : {});

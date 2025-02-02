@@ -8,6 +8,8 @@ if (!Math) {
   "./pages/user/index.js";
   "./pages/search/index.js";
   "./pages/test/index.js";
+  "./pages/hospital/index.js";
+  "./pages/service/index.js";
 }
 const _sfc_main = {
   onLaunch: function() {
