@@ -85,6 +85,18 @@ const _sfc_main = {
         url: "/pages/clients/index?act=select"
       });
     };
+    common_vendor.index.$on("clientChange", (data) => {
+      const {
+        age,
+        mobile,
+        sex,
+        name
+      } = data;
+      personInfo.value.name = name;
+      personInfo.value.mobile = mobile;
+      personInfo.value.sex = sex;
+      personInfo.value.age = age;
+    });
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_assets._imports_0$1,

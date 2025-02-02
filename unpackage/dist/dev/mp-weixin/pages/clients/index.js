@@ -20,7 +20,6 @@ const _sfc_main = {
       app.globalData.utils.request({
         url: "/User/clients",
         success: (res) => {
-          common_vendor.index.__f__("log", "at pages/clients/index.vue:79", res);
           clients.value = res.data.clients;
         }
       });

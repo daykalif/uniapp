@@ -209,6 +209,20 @@
 			url: '/pages/clients/index?act=select'
 		})
 	}
+
+	// 触发全局的自定义事件
+	uni.$on('clientChange', (data) => {
+		const {
+			age,
+			mobile,
+			sex,
+			name
+		} = data
+		personInfo.value.name = name
+		personInfo.value.mobile = mobile
+		personInfo.value.sex = sex
+		personInfo.value.age = age
+	});
 </script>
 
 <style>

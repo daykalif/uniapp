@@ -76,7 +76,6 @@
 		app.globalData.utils.request({
 			url: '/User/clients',
 			success: (res) => {
-				console.log(res);
 				clients.value = res.data.clients
 			}
 		})
