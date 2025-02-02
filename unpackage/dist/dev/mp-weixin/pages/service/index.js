@@ -40,6 +40,11 @@ const _sfc_main = {
       mobile: "",
       sex: ""
     });
+    const cfg = common_vendor.reactive({
+      page_xy: "",
+      page_fw: ""
+    });
+    const is_xieyi = common_vendor.ref(false);
     common_vendor.onLoad((option) => {
       getServiceDetail(option);
     });
@@ -85,6 +90,7 @@ const _sfc_main = {
         url: "/pages/clients/index?act=select"
       });
     };
+    const userReceiveInfo = common_vendor.ref("");
     common_vendor.index.$on("clientChange", (data) => {
       const {
         age,
@@ -97,6 +103,30 @@ const _sfc_main = {
       personInfo.value.sex = sex;
       personInfo.value.age = age;
     });
+    const onAddressChange = () => {
+      common_vendor.index.chooseAddress({
+        success: (res) => {
+          const {
+            cityName,
+            countyName,
+            detailInfo,
+            userName
+          } = res;
+          userReceiveInfo.value = res ? userName + "(" + cityName + countyName + detailInfo + ")" : "";
+          order.address.userName = userName;
+          order.address.cityName = cityName;
+          order.address.countyName = countyName;
+          order.address.detailInfo = detailInfo;
+          common_vendor.index.__f__("log", "at pages/service/index.vue:373", res, "res");
+        },
+        fail: (err) => {
+          common_vendor.index.__f__("log", "at pages/service/index.vue:376", err, "err");
+        }
+      });
+    };
+    const onXieyiChange = () => {
+      is_xieyi.value = !is_xieyi.value;
+    };
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_assets._imports_0$1,
@@ -104,7 +134,7 @@ const _sfc_main = {
         c: common_vendor.t(service.value.name),
         d: common_vendor.o(handleServiceTap),
         e: hospitals.value.length > 0 && service.value.stype == "10" || service.value.stype == "15" || service.value.stype == "20"
-      }, hospitals.value.length > 0 && service.value.stype == "10" || service.value.stype == "15" || service.value.stype == "20" ? {
+      }, hospitals.value.length > 0 && service.value.stype == "10" || service.value.stype == "15" || service.value.stype == "20" ? common_vendor.e({
         f: hospitals.value[hospital_index.value].name,
         g: common_vendor.o(onHospitalChange),
         h: hospital_index.value,
@@ -115,8 +145,46 @@ const _sfc_main = {
           placeholder: "请选择就诊时间"
         }),
         l: personInfo.value.name,
-        m: common_vendor.o(goSelectPerson)
-      } : {});
+        m: common_vendor.o(goSelectPerson),
+        n: service.value.stype == 15
+      }, service.value.stype == 15 ? {
+        o: order.receiveAddress,
+        p: common_vendor.o(($event) => order.receiveAddress = $event.detail.value)
+      } : {}, {
+        q: order.tel,
+        r: common_vendor.o(($event) => order.tel = $event.detail.value),
+        s: order.demand,
+        t: common_vendor.o(($event) => order.demand = $event.detail.value)
+      }) : {}, {
+        v: hospitals.value.length > 0 && service.value.stype == "30" || service.value.stype == "40"
+      }, hospitals.value.length > 0 && service.value.stype == "30" || service.value.stype == "40" ? {
+        w: hospitals.value[hospital_index.value].name,
+        x: common_vendor.o(onHospitalChange),
+        y: hospital_index.value,
+        z: hospitals.value,
+        A: common_vendor.o(onStartTimeChanged),
+        B: common_vendor.p({
+          timestamp: order.starttime,
+          placeholder: "请选择期望服务时间"
+        }),
+        C: userReceiveInfo.value,
+        D: common_vendor.o(onAddressChange),
+        E: order.tel,
+        F: common_vendor.o(($event) => order.tel = $event.detail.value),
+        G: order.demand,
+        H: common_vendor.o(($event) => order.demand = $event.detail.value)
+      } : {}, {
+        I: common_vendor.n("is_xieyi " + (is_xieyi.value ? "is_xieyi_on" : "")),
+        J: common_vendor.o(onXieyiChange),
+        K: cfg.page_xy,
+        L: cfg.page_fw,
+        M: order.price > 0
+      }, order.price > 0 ? {
+        N: common_vendor.t(order.price)
+      } : {}, {
+        O: common_vendor.n("btnp " + (is_xieyi.value ? "" : "btnp-disabled")),
+        P: common_vendor.o((...args) => _ctx.submit && _ctx.submit(...args))
+      });
     };
   }
 };

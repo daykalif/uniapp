@@ -46,6 +46,11 @@
       }
     ]
   },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseAddress"
+  ],
+  "permission": {},
   "usingComponents": {
     "my-component": "/mycomponents/component"
   }
