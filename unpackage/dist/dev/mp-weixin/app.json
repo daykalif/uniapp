@@ -6,6 +6,7 @@
     "pages/search/index",
     "pages/hospital/index",
     "pages/service/index",
+    "pages/clients/index",
     "pages/test/index"
   ],
   "window": {

@@ -84,6 +84,25 @@
 							</view>
 						</view>
 					</view>
+
+					<!-- 就诊人 -->
+					<view class="weui-cell weui-cell_input" @click="goSelectPerson">
+						<view class="weui-cell__hd" style="display: flex;width: 100%;">
+							<view class="weui-label">
+								就诊人
+							</view>
+							<view class="weui-cell__bd">
+							</view>
+							<view class="weui-cell__ft weui-cell__ft_in-access">
+								<view>
+									<input type="text" class="weui-input" :value="personInfo.name" placeholder="请选择就诊人"
+										placeholder-class="vp-placeholder" :disabled="true"
+										style="text-align: right;" />
+								</view>
+							</view>
+						</view>
+					</view>
+
 				</view>
 			</view>
 		</block>
@@ -121,6 +140,14 @@
 			detailInfo: ''
 		},
 		receiveAddress: '', // 接送地址
+	})
+
+	// 就诊人信息
+	const personInfo = ref({
+		name: '',
+		age: '',
+		mobile: '',
+		sex: '',
 	})
 
 	onLoad((option) => {
@@ -174,6 +201,13 @@
 	// 选择就诊时间
 	const onStartTimeChanged = (e) => {
 		order.starttime = e.detail.value
+	}
+
+	// 就诊人
+	const goSelectPerson = () => {
+		uni.navigateTo({
+			url: '/pages/clients/index?act=select'
+		})
 	}
 </script>
 

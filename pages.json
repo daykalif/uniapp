@@ -41,6 +41,12 @@
 				"enablePullDownRefresh": false
 			}
 		}, 
+		{
+			"path": "pages/clients/index",
+			"style": {
+				"navigationBarTitleText": "服务对象",
+			}
+		}, 
 		// 测试代码页面
 		{
 			"path": "pages/test/index",

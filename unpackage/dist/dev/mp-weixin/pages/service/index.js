@@ -34,6 +34,12 @@ const _sfc_main = {
       receiveAddress: ""
       // 接送地址
     });
+    const personInfo = common_vendor.ref({
+      name: "",
+      age: "",
+      mobile: "",
+      sex: ""
+    });
     common_vendor.onLoad((option) => {
       getServiceDetail(option);
     });
@@ -74,6 +80,11 @@ const _sfc_main = {
     const onStartTimeChanged = (e) => {
       order.starttime = e.detail.value;
     };
+    const goSelectPerson = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/clients/index?act=select"
+      });
+    };
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_assets._imports_0$1,
@@ -90,7 +101,9 @@ const _sfc_main = {
         k: common_vendor.p({
           timestamp: order.starttime,
           placeholder: "请选择就诊时间"
-        })
+        }),
+        l: personInfo.value.name,
+        m: common_vendor.o(goSelectPerson)
       } : {});
     };
   }
