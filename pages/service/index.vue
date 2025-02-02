@@ -552,7 +552,47 @@
 
 		// 1.如果flag还开着,带着有定时器,那么直接return出去
 		if (flag) return
-}
+
+		// 2.进来就打开
+		flag = true
+
+		// 3.开启定时器
+		const timer = setInterval(() => {
+			if (countdown.value.time <= 0) {
+				countdown.value.validText = '获取验证码'
+				countdown.value.time = 60
+				clearInterval(timer)
+				// 时间走完要关闭
+				flag = false
+			} else {
+				countdown.value.time -= 1
+				countdown.value.validText = `剩余${countdown.value.time}S`
+			}
+		}, 1000)
+
+		// 获取验证码
+		app.globalData.utils.request({
+			url: '/get/code',
+			method: 'POST',
+			data: {
+				tel: validMobile.value.phone // 手机号
+			},
+			success: res => {
+				uni.showToast({
+					title: '验证码发送成功,请尽快验证!',
+					duration: 1000,
+					icon: 'none'
+				})
+			},
+			fail: res => {
+				uni.showToast({
+					title: res.msg,
+					duration: 1000,
+					icon: 'none'
+				})
+			}
+		})
+	}
 
 	// 取消弹窗
 	const cancal = () => {
@@ -569,6 +609,31 @@
 				icon: 'none'
 			})
 		}
+
+		// 验证码验证,正式登录  
+		app.globalData.utils.request({
+			url: '/user/authentication',
+			method: 'POST',
+			data: {
+				tel: validMobile.value.phone, // 手机号
+				code: validMobile.value.validCode // 验证码
+			},
+			success: (res) => {
+				// 登录成功将token设置到缓存中
+				uni.setStorageSync('token', res.data.token)
+				popup.value.close() // 关闭弹窗
+				// 接下来正式创建订单
+				createOrder(orderData)
+			},
+			fail: (res) => {
+				popup.value.close() // 关闭弹窗
+				uni.showToast({
+					title: res.msg,
+					duration: 1000,
+					icon: 'none'
+				})
+			}
+		})
 	}
 </script>
 

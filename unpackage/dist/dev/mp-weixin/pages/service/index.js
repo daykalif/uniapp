@@ -228,6 +228,7 @@ const _sfc_main = {
         createOrder(orderData);
       }
     };
+    let flag = false;
     const countdownChange = () => {
       if (!validMobile.value.phone) {
         return common_vendor.index.showToast({
@@ -236,6 +237,42 @@ const _sfc_main = {
           icon: "none"
         });
       }
+      if (flag)
+        return;
+      flag = true;
+      const timer = setInterval(() => {
+        if (countdown.value.time <= 0) {
+          countdown.value.validText = "获取验证码";
+          countdown.value.time = 60;
+          clearInterval(timer);
+          flag = false;
+        } else {
+          countdown.value.time -= 1;
+          countdown.value.validText = `剩余${countdown.value.time}S`;
+        }
+      }, 1e3);
+      app.globalData.utils.request({
+        url: "/get/code",
+        method: "POST",
+        data: {
+          tel: validMobile.value.phone
+          // 手机号
+        },
+        success: (res) => {
+          common_vendor.index.showToast({
+            title: "验证码发送成功,请尽快验证!",
+            duration: 1e3,
+            icon: "none"
+          });
+        },
+        fail: (res) => {
+          common_vendor.index.showToast({
+            title: res.msg,
+            duration: 1e3,
+            icon: "none"
+          });
+        }
+      });
     };
     const cancal = () => {
       popup.value.close();
@@ -248,6 +285,29 @@ const _sfc_main = {
           icon: "none"
         });
       }
+      app.globalData.utils.request({
+        url: "/user/authentication",
+        method: "POST",
+        data: {
+          tel: validMobile.value.phone,
+          // 手机号
+          code: validMobile.value.validCode
+          // 验证码
+        },
+        success: (res) => {
+          common_vendor.index.setStorageSync("token", res.data.token);
+          popup.value.close();
+          createOrder(orderData);
+        },
+        fail: (res) => {
+          popup.value.close();
+          common_vendor.index.showToast({
+            title: res.msg,
+            duration: 1e3,
+            icon: "none"
+          });
+        }
+      });
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
