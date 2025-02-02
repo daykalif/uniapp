@@ -242,6 +242,20 @@
 			</view>
 		</uni-popup>
 
+
+		<!-- 支付二维码弹窗 -->
+		<uni-popup ref="QRCodePopup" type="center" :is-mask-click="false" background-color="#fff">
+			<view class="pay-box">
+				<image src="/static/resource/images/modal_closer.png" style="display:block;width:30rpx;height:30rpx"
+					@click="closeQRCodePopup">
+				</image>
+				<view class="text-center">微信扫一扫</view>
+				<!-- 关键 -->
+				<canvas id="qrcode" canvas-id="qrcode" style="width: 400rpx;height: 400rpx;"></canvas>
+				<view class="text-center">请用本人微信扫描以上二维码</view>
+			</view>
+		</uni-popup>
+
 	</view>
 </template>
 
@@ -249,7 +263,7 @@
 	import {
 		onLoad
 	} from "@dcloudio/uni-app"
-
+	import UQRCode from 'uqrcodejs';
 	import {
 		ref,
 		reactive,
@@ -308,6 +322,9 @@
 		validText: '获取验证码',
 		time: 60, // 倒计时
 	})
+
+	// 二维码
+	const QRCodePopup = ref(null)
 
 	onLoad((option) => {
 		getServiceDetail(option)
@@ -633,6 +650,57 @@
 					icon: 'none'
 				})
 			}
+		})
+	}
+
+
+	/**
+	 * 微信支付
+	 */
+	// 创建订单
+	const createOrder = (params) => {
+		// 先显示二维码弹框，再调接口，返回的支付url给UQRCode函数，渲染展示到qrcode view标签上
+		QRCodePopup.value.open('center')
+
+		app.globalData.utils.request({
+			url: '/pay/createOrder',
+			method: 'POST',
+			header: {
+				token: uni.getStorageSync('token')
+			},
+			data: params,
+			success: res => {
+				formatWXPayToQRCode(res.wx_code)
+			},
+			fail: res => {
+				console.log(res)
+			},
+		})
+	}
+
+	// 将微信支付url转换为微信二维码
+	const formatWXPayToQRCode = (url) => {
+		// 获取uQRCode实例
+		var qr = new UQRCode();
+		// 设置二维码内容
+		qr.data = url;
+		// 设置二维码大小，必须与canvas设置的宽高一致
+		qr.size = 200;
+		// 调用制作二维码方法
+		qr.make();
+		// 获取canvas上下文
+		var canvasContext = uni.createCanvasContext('qrcode');
+		// 设置uQRCode实例的canvas上下文
+		qr.canvasContext = canvasContext;
+		// 调用绘制方法将二维码图案绘制到canvas上
+		qr.drawCanvas();
+	}
+
+	// 关闭二维码弹窗并去订单列表
+	const closeQRCodePopup = () => {
+		QRCodePopup.value.close()
+		uni.switchTab({
+			url: '../order/index'
 		})
 	}
 </script>
