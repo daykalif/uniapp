@@ -20,13 +20,26 @@
 			</view>
 		</view>
 
+		<!-- 轮播图 -->
+		<view class="index-swiper" v-if="bannerList && bannerList.length > 0">
+			<swiper :indicator-dots="true" circular autoplay :interval="4000" :duration="500">
+				<swiper-item v-for="(item,index) in bannerList" :key="item.id">
+					<image :src="item.pic_image_url" mode="widthFix"></image>
+				</swiper-item>
+			</swiper>
+		</view>
 	</view>
 </template>
 
 <script setup>
 	import {
-		onLoad
+		onLoad,
 	} from '@dcloudio/uni-app';
+
+	import {
+		ref
+	} from "vue";
+
 
 	const navigatorTo = () => {
 		uni.navigateTo({
@@ -34,13 +47,54 @@
 		});
 	}
 
-	const app = getApp();
+	const app = getApp() // 获取uniapp实例
+	const bannerList = ref([]) // 轮播图
+
 	onLoad(() => {
 		// 调用用户信息
 		app.globalData.utils.getUserInfo();
+
+		// 先获取地区码
+		app.globalData.utils.request({
+			url: '/app/init',
+			success: ({
+				data
+			}) => {
+				const {
+					id
+				} = data.data.area;
+
+				// 根据地区码获取该地区的医院信息（轮播图）
+				app.globalData.utils.request({
+					url: '/Index/index',
+					data: {
+						aid: id
+					},
+					success: (ress) => {
+						bannerList.value = ress.data.data.slides // 轮播图
+						console.log(bannerList.value, 'ress');
+					}
+				})
+			},
+
+		})
 	});
 </script>
 
 <style>
+	.index-swiper {
+		overflow: hidden;
+		margin: 20rpx 20rpx 0;
+	}
 
+	.index-swiper swiper {
+		overflow: hidden;
+		height: 320rpx;
+		border-radius: 10rpx;
+	}
+
+	.index-swiper swiper-item image {
+		width: 100%;
+		height: 100%;
+	}
 </style>
