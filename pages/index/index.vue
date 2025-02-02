@@ -121,7 +121,7 @@
 			}) => {
 				const {
 					id
-				} = data.data.area;
+				} = data.area;
 
 				// 根据地区码获取该地区的医院信息（轮播图）
 				app.globalData.utils.request({
@@ -130,10 +130,10 @@
 						aid: id
 					},
 					success: (ress) => {
-						bannerList.value = ress.data.data.slides // 轮播图
-						nav2s.value = ress.data.data.nav2s // 两个导航
-						navs.value = ress.data.data.navs // 多个导航
-						hospitals.value = ress.data.data.hospitals // 医院列表
+						bannerList.value = ress.data.slides // 轮播图
+						nav2s.value = ress.data.nav2s // 两个导航
+						navs.value = ress.data.navs // 多个导航
+						hospitals.value = ress.data.hospitals // 医院列表
 					}
 				})
 			},

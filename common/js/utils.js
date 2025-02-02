@@ -59,16 +59,16 @@ class Utils {
 		
 			第一个请求发起
 				调用 request 方法：
-					传入的 options 中 isShowLoading 为 true，并且 options.url 存在（假设满足条件）。
-					由于 options.isShowLoading 为 true，调用 this.showLoadingFun() 方法。
+					传入的 option 中 isShowLoading 为 true，并且 option.url 存在（假设满足条件）。
+					由于 option.isShowLoading 为 true，调用 this.showLoadingFun() 方法。
 					执行 showLoadingFun 方法：
 					通过 uni.getStorageSync('isShowLoading') 获取本地存储的值，此时为 false，所以不会执行隐藏加载动画的逻辑。
 					调用 uni.showLoading 显示加载动画，设置 title 为 “加载中...”。
 					uni.showLoading 执行完成后，触发 complete 回调，在回调中使用 uni.setStorageSync('isShowLoading', true) 将本地存储中的 isShowLoading 设置为 true，表示加载动画正在显示。
 			第二个请求发起
 				调用 request 方法：
-					同样传入的 options 中 isShowLoading 为 true，且 options.url 存在。
-					因为 options.isShowLoading 为 true，再次调用 this.showLoadingFun() 方法。
+					同样传入的 option 中 isShowLoading 为 true，且 option.url 存在。
+					因为 option.isShowLoading 为 true，再次调用 this.showLoadingFun() 方法。
 					执行 showLoadingFun 方法：
 					通过 uni.getStorageSync('isShowLoading') 获取本地存储的值，此时为 true，说明已有加载动画正在显示。
 					执行 uni.hideLoading() 隐藏当前的加载动画，然后使用 uni.setStorageSync('isShowLoading', false) 将本地存储中的 isShowLoading 设置为 false。
@@ -77,38 +77,44 @@ class Utils {
 					
 		综上所述，在同时发起两个请求且 isShowLoading 都为 true 的情况下，会先显示第一个加载动画，当第二个请求发起时，会先隐藏第一个加载动画，再显示新的加载动画，始终保证页面上最多只有一个加载动画显示。
 	*/
-	request(options = {
+	request(option = {
 		isShowLoading: false
 	}) {
 		// 如果请求地址为空，则返回出去
-		if (!options.url) return false
+		if (!option.url) return false
 
 		// 如果参数中存在动画，则启用自定义动画
-		if (options.isShowLoading) {
+		if (option.isShowLoading) {
 			this.showLoadingFun()
 		}
 
 		uni.request({
-			url: this.baseUrl + options.url, // 请求地址
-			method: options.method ? options.method : 'GET', // 请求方式
-			data: options.data ? options.data : {}, // 请求参数
-			header: options.header ? options.header : {}, // 请求头
-			success: (response) => { // code === 200
+			url: this.baseUrl + option.url,
+			data: option.data ? option.data : {},
+			header: option.header ? option.header : {},
+			method: option.method ? option.method : 'GET',
+			// 请求成功
+			success: (response) => {
+				// 关闭加载效果
 				uni.hideLoading()
-				// 10000为成功，否则为失败
+				// 后端返回数据异常
 				if (response.data.code != 10000) {
-					if (options.fail && typeof options.fail == 'function') {
-						options.fail(response)
+					// 将失败结果返回出去
+					if (option.fail && typeof option.fail == 'function') {
+						option.fail(response)
 					}
 				} else {
-					if (options.success && typeof options.success == 'function') {
-						options.success(response)
+					// 将成功的结果返回
+					if (option.success && typeof option.success == 'function') {
+						option.success(response.data)
 					}
 				}
 			},
-			fail: (err) => { // code !== 200
-				console.log(err, 'err');
+			// 请求失败
+			fail: response => {
+				// 关闭加载效果
 				uni.hideLoading()
+				console.log(response);
 			}
 		})
 	}

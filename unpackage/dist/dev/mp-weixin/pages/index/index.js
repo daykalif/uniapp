@@ -26,17 +26,17 @@ const _sfc_main = {
         }) => {
           const {
             id
-          } = data.data.area;
+          } = data.area;
           app.globalData.utils.request({
             url: "/Index/index",
             data: {
               aid: id
             },
             success: (ress) => {
-              bannerList.value = ress.data.data.slides;
-              nav2s.value = ress.data.data.nav2s;
-              navs.value = ress.data.data.navs;
-              hospitals.value = ress.data.data.hospitals;
+              bannerList.value = ress.data.slides;
+              nav2s.value = ress.data.nav2s;
+              navs.value = ress.data.navs;
+              hospitals.value = ress.data.hospitals;
             }
           });
         }
