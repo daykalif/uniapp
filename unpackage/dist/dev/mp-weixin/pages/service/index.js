@@ -1,6 +1,14 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const common_assets = require("../../common/assets.js");
+if (!Array) {
+  const _easycom_dtPicker2 = common_vendor.resolveComponent("dtPicker");
+  _easycom_dtPicker2();
+}
+const _easycom_dtPicker = () => "../../components/dtPicker/dtPicker.js";
+if (!Math) {
+  _easycom_dtPicker();
+}
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -63,6 +71,9 @@ const _sfc_main = {
       hospital_index.value = changeIndex;
       order.price = hospitals.value[changeIndex].service_price ?? "";
     };
+    const onStartTimeChanged = (e) => {
+      order.starttime = e.detail.value;
+    };
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_assets._imports_0$1,
@@ -74,7 +85,12 @@ const _sfc_main = {
         f: hospitals.value[hospital_index.value].name,
         g: common_vendor.o(onHospitalChange),
         h: hospital_index.value,
-        i: hospitals.value
+        i: hospitals.value,
+        j: common_vendor.o(onStartTimeChanged),
+        k: common_vendor.p({
+          timestamp: order.starttime,
+          placeholder: "请选择就诊时间"
+        })
       } : {});
     };
   }

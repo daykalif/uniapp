@@ -47,6 +47,7 @@
 		<block v-if="hospitals.length > 0 && service.stype == '10' || service.stype == '15'	|| service.stype == '20' ">
 			<view class="pub-box">
 				<view class="pub-box-bd">
+					<!-- 就诊医院 -->
 					<view class="weui-cell weui-cell_input">
 						<view class="weui-cell__hd" style="display: flex;width: 100%;">
 							<view class="weui-label">
@@ -62,6 +63,23 @@
 											:value="hospitals[hospital_index].name"
 											placeholder-class="vp-placeholder" />
 									</picker>
+								</view>
+							</view>
+						</view>
+					</view>
+
+					<!-- 就诊时间 -->
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__hd" style="display: flex;width: 100%;">
+							<view class="weui-label">
+								就诊时间
+							</view>
+							<view class="weui-cell__bd">
+							</view>
+							<view class="weui-cell__ft weui-cell__ft_in-access">
+								<view>
+									<dtPicker @dtPickerChanged="onStartTimeChanged" :timestamp="order.starttime"
+										placeholder="请选择就诊时间"></dtPicker>
 								</view>
 							</view>
 						</view>
@@ -140,6 +158,7 @@
 			}
 		})
 	}
+
 	// 服务内容
 	const handleServiceTap = () => {
 
@@ -150,6 +169,11 @@
 		const changeIndex = parseInt(e.detail.value)
 		hospital_index.value = changeIndex
 		order.price = hospitals.value[changeIndex].service_price ?? ''
+	}
+
+	// 选择就诊时间
+	const onStartTimeChanged = (e) => {
+		order.starttime = e.detail.value
 	}
 </script>
 
