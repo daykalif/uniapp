@@ -223,6 +223,25 @@
 				</view>
 			</view>
 		</view>
+
+
+		<!-- 手机登录弹窗 -->
+		<uni-popup ref="popup" type="center" :is-mask-click="false" background-color="#fff">
+			<view class="popup-content">
+				<view class="group">
+					<input class="uni-input" type="tel" v-model="validMobile.phone" placeholder="手机号" />
+				</view>
+				<view class="group">
+					<input class="uni-input" v-model="validMobile.validCode" placeholder="请输入验证码" />
+					<text class="valid-text" @click="countdownChange">{{countdown.validText}}</text>
+				</view>
+			</view>
+			<view class="btns">
+				<view class="cancal" @click="cancal">取消</view>
+				<view class="ok" @click="ok">确定</view>
+			</view>
+		</uni-popup>
+
 	</view>
 </template>
 
@@ -274,6 +293,21 @@
 
 	// 默认不勾选协议
 	const is_xieyi = ref(false)
+
+	// 登录弹窗
+	const popup = ref(null)
+
+	// 校验登录信息
+	const validMobile = ref({
+		validCode: '', // 验证码
+		phone: '', // 手机号
+	})
+
+	// 验证码
+	const countdown = ref({
+		validText: '获取验证码',
+		time: 60, // 倒计时
+	})
 
 	onLoad((option) => {
 		getServiceDetail(option)
@@ -490,6 +524,51 @@
 		orderData.service_stype = serviceData.stype // 服务类型
 
 		console.log(orderData, '提交订单的数据');
+
+		// 上面验证都通过,正式创建订单之前做登录校验,验证用户是否已登录,未登录则显示弹窗,让其去手机号登录
+		if (!uni.getStorageSync('token')) {
+			popup.value.open('center') // 显示弹窗
+		} else {
+			// 创建订单逻辑
+			createOrder(orderData)
+		}
+	}
+
+
+	/**
+	 * 登录弹窗相关
+	 */
+	// 登录
+	let flag = false // 做防抖，flag为true表示正在倒计时，无法点击
+	const countdownChange = () => {
+		// 校验 手机号
+		if (!validMobile.value.phone) {
+			return uni.showToast({
+				title: '请输入手机号',
+				duration: 1000,
+				icon: 'none'
+			})
+		}
+
+		// 1.如果flag还开着,带着有定时器,那么直接return出去
+		if (flag) return
+}
+
+	// 取消弹窗
+	const cancal = () => {
+		popup.value.close() // 关闭弹窗
+	}
+
+	// 确认弹窗
+	const ok = () => {
+		// 如果手机号为空 或 验证码为空,则提示用户
+		if (!validMobile.value.phone || !validMobile.value.validCode) {
+			return uni.showToast({
+				title: '请检查输入信息',
+				duration: 1000,
+				icon: 'none'
+			})
+		}
 	}
 </script>
 

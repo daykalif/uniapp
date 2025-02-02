@@ -3,11 +3,13 @@ const common_vendor = require("../../common/vendor.js");
 const common_assets = require("../../common/assets.js");
 if (!Array) {
   const _easycom_dtPicker2 = common_vendor.resolveComponent("dtPicker");
-  _easycom_dtPicker2();
+  const _easycom_uni_popup2 = common_vendor.resolveComponent("uni-popup");
+  (_easycom_dtPicker2 + _easycom_uni_popup2)();
 }
 const _easycom_dtPicker = () => "../../components/dtPicker/dtPicker.js";
+const _easycom_uni_popup = () => "../../uni_modules/uni-popup/components/uni-popup/uni-popup.js";
 if (!Math) {
-  _easycom_dtPicker();
+  (_easycom_dtPicker + _easycom_uni_popup)();
 }
 const _sfc_main = {
   __name: "index",
@@ -45,6 +47,18 @@ const _sfc_main = {
       page_fw: ""
     });
     const is_xieyi = common_vendor.ref(false);
+    const popup = common_vendor.ref(null);
+    const validMobile = common_vendor.ref({
+      validCode: "",
+      // 验证码
+      phone: ""
+      // 手机号
+    });
+    const countdown = common_vendor.ref({
+      validText: "获取验证码",
+      time: 60
+      // 倒计时
+    });
     common_vendor.onLoad((option) => {
       getServiceDetail(option);
     });
@@ -117,10 +131,10 @@ const _sfc_main = {
           order.address.cityName = cityName;
           order.address.countyName = countyName;
           order.address.detailInfo = detailInfo;
-          common_vendor.index.__f__("log", "at pages/service/index.vue:373", res, "res");
+          common_vendor.index.__f__("log", "at pages/service/index.vue:407", res, "res");
         },
         fail: (err) => {
-          common_vendor.index.__f__("log", "at pages/service/index.vue:376", err, "err");
+          common_vendor.index.__f__("log", "at pages/service/index.vue:410", err, "err");
         }
       });
     };
@@ -140,7 +154,7 @@ const _sfc_main = {
       const serviceData = common_vendor.toRaw(service.value);
       const personInfoData = common_vendor.toRaw(personInfo.value);
       const hospitalsData = common_vendor.toRaw(hospitals.value);
-      common_vendor.index.__f__("log", "at pages/service/index.vue:404", "serviceData--->", serviceData);
+      common_vendor.index.__f__("log", "at pages/service/index.vue:438", "serviceData--->", serviceData);
       if (serviceData) {
         if (serviceData.stype < 100) {
           if (hospital_index.value == 0) {
@@ -207,7 +221,33 @@ const _sfc_main = {
       orderData.service_id = serviceData.id;
       orderData.service_name = serviceData.name;
       orderData.service_stype = serviceData.stype;
-      common_vendor.index.__f__("log", "at pages/service/index.vue:492", orderData, "提交订单的数据");
+      common_vendor.index.__f__("log", "at pages/service/index.vue:526", orderData, "提交订单的数据");
+      if (!common_vendor.index.getStorageSync("token")) {
+        popup.value.open("center");
+      } else {
+        createOrder(orderData);
+      }
+    };
+    const countdownChange = () => {
+      if (!validMobile.value.phone) {
+        return common_vendor.index.showToast({
+          title: "请输入手机号",
+          duration: 1e3,
+          icon: "none"
+        });
+      }
+    };
+    const cancal = () => {
+      popup.value.close();
+    };
+    const ok = () => {
+      if (!validMobile.value.phone || !validMobile.value.validCode) {
+        return common_vendor.index.showToast({
+          title: "请检查输入信息",
+          duration: 1e3,
+          icon: "none"
+        });
+      }
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
@@ -265,7 +305,23 @@ const _sfc_main = {
         N: common_vendor.t(order.price)
       } : {}, {
         O: common_vendor.n("btnp " + (is_xieyi.value ? "" : "btnp-disabled")),
-        P: common_vendor.o(submit)
+        P: common_vendor.o(submit),
+        Q: validMobile.value.phone,
+        R: common_vendor.o(($event) => validMobile.value.phone = $event.detail.value),
+        S: validMobile.value.validCode,
+        T: common_vendor.o(($event) => validMobile.value.validCode = $event.detail.value),
+        U: common_vendor.t(countdown.value.validText),
+        V: common_vendor.o(countdownChange),
+        W: common_vendor.o(cancal),
+        X: common_vendor.o(ok),
+        Y: common_vendor.sr(popup, "fcb1e878-2", {
+          "k": "popup"
+        }),
+        Z: common_vendor.p({
+          type: "center",
+          ["is-mask-click"]: false,
+          ["background-color"]: "#fff"
+        })
       });
     };
   }
