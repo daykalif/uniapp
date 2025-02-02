@@ -19,7 +19,7 @@ const _sfc_main = {
     return (_ctx, _cache) => {
       return {
         a: common_vendor.p({
-          titleText: "首页"
+          isHome: true
         }),
         b: common_vendor.o(navigatorTo)
       };

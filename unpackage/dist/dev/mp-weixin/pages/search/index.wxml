@@ -1,1 +1,1 @@
-<view><navbar u-i="0586efe2-0" bind:__l="__l"></navbar><view style="margin-top:140rpx">搜索页面</view></view>
+<view><navbar wx:if="{{a}}" u-i="0586efe2-0" bind:__l="__l" u-p="{{a}}"></navbar><view style="margin-top:140rpx">搜索页面</view></view>

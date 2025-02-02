@@ -27,6 +27,11 @@ const _sfc_main = {
     titleText: {
       type: String,
       default: ""
+    },
+    // 是否为首页
+    isHome: {
+      type: Boolean,
+      default: false
     }
   },
   setup(__props) {
@@ -37,6 +42,7 @@ const _sfc_main = {
     const textStyle = common_vendor.ref("");
     const iconStyle = common_vendor.ref("");
     const pages = common_vendor.ref(getCurrentPages().length);
+    const menu = common_vendor.reactive(common_vendor.index.getMenuButtonBoundingClientRect());
     const setNavSize = () => {
       const {
         system,
@@ -71,20 +77,25 @@ const _sfc_main = {
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_vendor.s("height:" + status.value + "rpx;" + containerStyle.value),
-        b: pages.value > 1
+        b: __props.isHome
+      }, __props.isHome ? {
+        c: common_vendor.s("height:" + menu.height * 2 + "rpx;line-height:" + menu.height * 2 + "rpx;margin-top:" + (menu.top * 2 - status.value) + "rpx;margin-left:32rpx;margin-right:" + (menu.width * 2 + 24) + "rpx;background:#f4f4f4;border-radius:200rpx;text-align:center"),
+        d: common_vendor.s("height:" + navHeight.value + "rpx;line-height:" + navHeight.value + "rpx;padding-left:20rpx;")
+      } : common_vendor.e({
+        e: pages.value > 1
       }, pages.value > 1 ? {
-        c: common_assets._imports_0$1
+        f: common_assets._imports_0$1
       } : {
-        d: common_assets._imports_1
+        g: common_assets._imports_1
       }, {
-        e: common_vendor.o(backHome),
-        f: __props.titleText
+        h: common_vendor.o(backHome),
+        i: __props.titleText
       }, __props.titleText ? {
-        g: common_vendor.t(__props.titleText),
-        h: common_vendor.s("height:" + navHeight.value + "rpx;line-height:" + navHeight.value + "rpx;" + textStyle.value)
+        j: common_vendor.t(__props.titleText),
+        k: common_vendor.s("height:" + navHeight.value + "rpx;line-height:" + navHeight.value + "rpx;" + textStyle.value)
       } : {}, {
-        i: common_vendor.s("height:" + navHeight.value + "rpx;" + containerStyle.value)
-      });
+        l: common_vendor.s("height:" + navHeight.value + "rpx;" + containerStyle.value)
+      }));
     };
   }
 };
