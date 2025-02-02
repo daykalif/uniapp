@@ -4,7 +4,18 @@
 		<view :style="'height:' + status + 'rpx;' + containerStyle"></view>
 
 		<!-- 内容 -->
-		<view class="navbar" :style="'height:' + navHeight + 'rpx;' + containerStyle"></view>
+		<view class="navbar" :style="'height:' + navHeight + 'rpx;' + containerStyle">
+			<view class="back-icon" @click="backHome">
+				<image v-if="pages > 1" src="../../static/resource/navbar/ic_back.png"></image>
+				<image v-else src="../../static/resource/navbar/ic_home.png"></image>
+			</view>
+
+			<view class="nav-title" v-if="titleText">
+				<view :style="'height:' + navHeight + 'rpx;line-height:' + navHeight + 'rpx;' + textStyle">
+					{{titleText}}
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -35,6 +46,10 @@
 		iconHeight: {
 			type: Number,
 			default: 38
+		},
+		titleText: {
+			type: String,
+			default: ''
 		}
 	});
 
@@ -52,6 +67,9 @@
 
 	// 图标样式
 	const iconStyle = ref('');
+
+	// 页面栈数量
+	const pages = ref(getCurrentPages().length);
 
 	// 计算状态栏高度
 	const setNavSize = () => {
@@ -82,6 +100,19 @@
 		setNavSize();
 		setStyle();
 	});
+
+	// 返回按钮
+	const backHome = () => {
+		if (pages.value > 1) {
+			// 保留当前页面，跳转到应用内的某个页面，使用uni.navigateBack可以返回到原页面。
+			uni.navigateBack();
+		} else {
+			// 跳转到 tabBar 页面，并关闭其他所有非 tabBar 页面，要用switchTab；
+			uni.switchTab({
+				url: '/pages/index/index'
+			});
+		}
+	}
 </script>
 
 <style>
@@ -92,5 +123,29 @@
 		left: 0;
 		right: 0;
 		z-index: 2;
+	}
+
+	.back-icon {
+		display: flex;
+		align-items: center;
+		width: 64rpx;
+		height: 100%;
+		margin-left: 10rpx;
+	}
+
+	.back-icon image {
+		width: 64rpx;
+		height: 64rpx;
+	}
+
+	.navbar {
+		position: relative;
+	}
+
+	.nav-title {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translate(-50%);
 	}
 </style>

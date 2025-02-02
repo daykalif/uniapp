@@ -2,7 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/order/index",
-    "pages/user/index"
+    "pages/user/index",
+    "pages/search/index",
+    "pages/test/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -32,6 +34,12 @@
         "iconPath": "/static/resource/images/tab_user.png",
         "selectedIconPath": "/static/resource/images/tab_user_seled.png",
         "text": "我的"
+      },
+      {
+        "pagePath": "pages/test/index",
+        "iconPath": "/static/resource/images/tab_index.png",
+        "selectedIconPath": "/static/resource/images/tab_index_seled.png",
+        "text": "测试"
       }
     ]
   },

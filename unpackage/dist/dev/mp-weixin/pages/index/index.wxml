@@ -1,1 +1,1 @@
-<view class="content"><navbar u-i="0f4daaa1-0" bind:__l="__l"></navbar><image class="logo" src="{{a}}"></image><view class="text-area"><text class="title">{{b}}</text></view><view wx:for="{{c}}" wx:for-item="item" wx:key="c"><text>{{item.a}}</text><text>{{item.b}}</text></view><button bindtap="{{d}}">点我</button><text>总共购买的水果数量：{{e}}</text></view>
+<view class="content"><navbar wx:if="{{a}}" u-i="0f4daaa1-0" bind:__l="__l" u-p="{{a}}"/><button style="margin-top:140rpx" bindtap="{{b}}">跳转到搜索页</button></view>

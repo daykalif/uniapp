@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const common_assets = require("../../common/assets.js");
 const _sfc_main = {
   __name: "navbar",
   props: {
@@ -22,6 +23,10 @@ const _sfc_main = {
     iconHeight: {
       type: Number,
       default: 38
+    },
+    titleText: {
+      type: String,
+      default: ""
     }
   },
   setup(__props) {
@@ -31,6 +36,7 @@ const _sfc_main = {
     const containerStyle = common_vendor.ref("");
     const textStyle = common_vendor.ref("");
     const iconStyle = common_vendor.ref("");
+    const pages = common_vendor.ref(getCurrentPages().length);
     const setNavSize = () => {
       const {
         system,
@@ -53,11 +59,32 @@ const _sfc_main = {
       setNavSize();
       setStyle();
     });
+    const backHome = () => {
+      if (pages.value > 1) {
+        common_vendor.index.navigateBack();
+      } else {
+        common_vendor.index.switchTab({
+          url: "/pages/index/index"
+        });
+      }
+    };
     return (_ctx, _cache) => {
-      return {
+      return common_vendor.e({
         a: common_vendor.s("height:" + status.value + "rpx;" + containerStyle.value),
-        b: common_vendor.s("height:" + navHeight.value + "rpx;" + containerStyle.value)
-      };
+        b: pages.value > 1
+      }, pages.value > 1 ? {
+        c: common_assets._imports_0$1
+      } : {
+        d: common_assets._imports_1
+      }, {
+        e: common_vendor.o(backHome),
+        f: __props.titleText
+      }, __props.titleText ? {
+        g: common_vendor.t(__props.titleText),
+        h: common_vendor.s("height:" + navHeight.value + "rpx;line-height:" + navHeight.value + "rpx;" + textStyle.value)
+      } : {}, {
+        i: common_vendor.s("height:" + navHeight.value + "rpx;" + containerStyle.value)
+      });
     };
   }
 };

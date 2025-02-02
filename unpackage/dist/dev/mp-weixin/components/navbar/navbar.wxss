@@ -7,3 +7,23 @@
 		right: 0;
 		z-index: 2;
 }
+.back-icon {
+		display: flex;
+		align-items: center;
+		width: 64rpx;
+		height: 100%;
+		margin-left: 10rpx;
+}
+.back-icon image {
+		width: 64rpx;
+		height: 64rpx;
+}
+.navbar {
+		position: relative;
+}
+.nav-title {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translate(-50%);
+}
