@@ -53,6 +53,35 @@
 			</block>
 		</view>
 
+		<!-- 医院列表 -->
+		<view class="weui-cells hosp-list">
+			<view class="weui-cell hosp-item weui-cell-access" v-for="(item,index) in hospitals" :key="item.id"
+				:data-hid="item.id" @click="toHospitals">
+				<!-- 图片 -->
+				<view class="weui-cell__hd">
+					<image :src="item.avatar?item.avatar_url:'../../static/resource/images/avatar.jpg'"
+						mode="aspectFill" class="hosp-avatar"></image>
+				</view>
+				<!-- 医院信息 -->
+				<view class="weui-cell__bd">
+					<!-- 医院名称 -->
+					<view>
+						<text class="hosp-name">{{item.name}}</text>
+					</view>
+					<!-- 医院类型 -->
+					<view class="hosp-line">
+						<!-- 医院地位 -->
+						<text class="hosp-rank">{{item.rank}}</text>
+						<!-- 医院标签 -->
+						<text class="hosp-label">{{item.label}}</text>
+					</view>
+					<!-- 医院介绍 -->
+					<view class="hosp-line">
+						<text class="hosp-intro">{{item.intro}}</text>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -77,6 +106,8 @@
 	const bannerList = ref([]) // 轮播图
 	const nav2s = ref([]) // 2个导航
 	const navs = ref([]) // 多个导航
+	// 医院列表
+	const hospitals = ref([])
 
 	onLoad(() => {
 		// 调用用户信息
@@ -102,7 +133,7 @@
 						bannerList.value = ress.data.data.slides // 轮播图
 						nav2s.value = ress.data.data.nav2s // 两个导航
 						navs.value = ress.data.data.navs // 多个导航
-						console.log(bannerList.value, 'ress');
+						hospitals.value = ress.data.data.hospitals // 医院列表
 					}
 				})
 			},
@@ -124,7 +155,6 @@
 	const onNav2sTap = (e) => {
 		// 获取当前点击的图片的数据
 		const nav = toRaw(nav2s.value)[e.currentTarget.dataset.index]
-		console.log(nav);
 		jump(nav, 'nav2')
 	}
 
@@ -134,9 +164,17 @@
 		const nav = toRaw(navs.value)[e.currentTarget.dataset.index]
 		jump(nav, 'nav')
 	}
+
+	// 跳转到医院详情
+	const toHospitals = (e) => {
+		uni.navigateTo({
+			url: '/pages/hospital/index?hid=' + e.currentTarget.dataset.hid
+		})
+	}
 </script>
 
 <style>
+	/* banner */
 	.index-swiper {
 		overflow: hidden;
 		margin: 20rpx 20rpx 0;
@@ -153,6 +191,7 @@
 		height: 100%;
 	}
 
+	/* 快捷入口 */
 	.nav2-list {
 		margin: 10rpx 20rpx 0 20rpx;
 	}
@@ -213,5 +252,76 @@
 		font-weight: bold;
 		white-space: nowrap;
 		overflow: hidden;
+	}
+
+	/* 医院列表 */
+	.hosp-list {
+		margin: 10rpx 0 0 0;
+		background: none;
+	}
+
+	.hosp-list::before {
+		display: none;
+	}
+
+	.hosp-list::after {
+		display: none;
+	}
+
+	.hosp-item {
+		-webkit-box-align: stretch;
+		-webkit-align-items: stretch;
+		align-items: stretch;
+		padding: 20rpx;
+		margin: 20rpx;
+		border-radius: 10rpx;
+		overflow: hidden;
+		box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.04), 0 1px 6px 0 rgba(0, 0, 0, 0.04);
+	}
+
+	.hosp-item::before {
+		display: none;
+	}
+
+	.hosp-item::after {
+		display: none;
+	}
+
+	.hosp-name {
+		font-weight: bold;
+		font-size: 34rpx;
+	}
+
+	.hosp-avatar {
+		display: block;
+		width: 200rpx;
+		height: 180rpx;
+		border-radius: 10rpx;
+		overflow: hidden;
+		margin-right: 20rpx;
+	}
+
+	.hosp-line {
+		margin-top: 5rpx;
+	}
+
+	.hosp-line text {
+		font-size: 26rpx;
+	}
+
+	.hosp-rank {
+		font-weight: bold;
+		color: #0bb585;
+		margin-right: 15rpx;
+	}
+
+	.hosp-label {
+		font-weight: bold;
+		color: #0ca7ae;
+		margin-right: 15rpx;
+	}
+
+	.hosp-intro {
+		color: #999999;
 	}
 </style>

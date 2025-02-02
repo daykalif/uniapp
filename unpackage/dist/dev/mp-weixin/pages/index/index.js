@@ -16,6 +16,7 @@ const _sfc_main = {
     const bannerList = common_vendor.ref([]);
     const nav2s = common_vendor.ref([]);
     const navs = common_vendor.ref([]);
+    const hospitals = common_vendor.ref([]);
     common_vendor.onLoad(() => {
       app.globalData.utils.getUserInfo();
       app.globalData.utils.request({
@@ -35,7 +36,7 @@ const _sfc_main = {
               bannerList.value = ress.data.data.slides;
               nav2s.value = ress.data.data.nav2s;
               navs.value = ress.data.data.navs;
-              common_vendor.index.__f__("log", "at pages/index/index.vue:105", bannerList.value, "ress");
+              hospitals.value = ress.data.data.hospitals;
             }
           });
         }
@@ -50,12 +51,16 @@ const _sfc_main = {
     };
     const onNav2sTap = (e) => {
       const nav = common_vendor.toRaw(nav2s.value)[e.currentTarget.dataset.index];
-      common_vendor.index.__f__("log", "at pages/index/index.vue:127", nav);
       jump(nav);
     };
     const onNavsTap = (e) => {
       const nav = common_vendor.toRaw(navs.value)[e.currentTarget.dataset.index];
       jump(nav);
+    };
+    const toHospitals = (e) => {
+      common_vendor.index.navigateTo({
+        url: "/pages/hospital/index?hid=" + e.currentTarget.dataset.hid
+      });
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
@@ -96,7 +101,20 @@ const _sfc_main = {
             f: index
           };
         })
-      } : {});
+      } : {}, {
+        l: common_vendor.f(hospitals.value, (item, index, i0) => {
+          return {
+            a: item.avatar ? item.avatar_url : "../../static/resource/images/avatar.jpg",
+            b: common_vendor.t(item.name),
+            c: common_vendor.t(item.rank),
+            d: common_vendor.t(item.label),
+            e: common_vendor.t(item.intro),
+            f: item.id,
+            g: item.id,
+            h: common_vendor.o(toHospitals, item.id)
+          };
+        })
+      });
     };
   }
 };
