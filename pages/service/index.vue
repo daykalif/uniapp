@@ -382,6 +382,115 @@
 	const onXieyiChange = () => {
 		is_xieyi.value = !is_xieyi.value
 	}
+
+
+	// 支付
+	let orderData
+	const submit = () => {
+		// 校验 阅读协议按钮
+		if (!is_xieyi.value) {
+			return uni.showToast({
+				title: '请您阅读并同意<用户协议>和服务协议',
+				duration: 1000,
+				icon: ''
+			});
+		}
+
+		orderData = toRaw(order) // 返回没响应式的订单对象
+		const serviceData = toRaw(service.value) // 返回没响应式的服务对象
+		const personInfoData = toRaw(personInfo.value) // 返回没响应式的就诊人信息对象
+		const hospitalsData = toRaw(hospitals.value) // 返回没响应式的酒店对象
+
+		console.log('serviceData--->', serviceData);
+		if (serviceData) {
+			// 校验 选择的医院
+			if (serviceData.stype < 100) {
+				// 如果用户没有选择医院,则请提示
+				if (hospital_index.value == 0) {
+					return uni.showToast({
+						title: '请选择医院',
+						duration: 1000,
+						icon: ''
+					});
+				}
+				// 有则代表有选择医院,则用索引取出选择医院的id和名称
+				orderData.hospital_id = hospitalsData[hospital_index.value].id
+				orderData.hospital_name = hospitalsData[hospital_index.value].name
+			}
+
+			// 代跑取药的
+			if (serviceData.stype == '30' || serviceData.stype == '40') {
+				// 校验 服务时间
+				if (orderData.starttime == 0) {
+					return uni.showToast({
+						title: '请选择服务时间',
+						duration: 1000,
+						icon: ''
+					});
+				}
+
+				// 校验 收件信息
+				if (!orderData.address.userName) {
+					return uni.showToast({
+						title: '请选择收件信息',
+						duration: 1000,
+						icon: ''
+					});
+				}
+			}
+
+			// 非代跑取药的
+			if (serviceData.stype == '10' || serviceData.stype == '15' || serviceData.stype == '20') {
+				// 校验 就诊时间
+				if (orderData.starttime == 0) {
+					return uni.showToast({
+						title: '请选择就诊时间',
+						duration: 1000,
+						icon: ''
+					});
+				}
+
+				// 校验 选择就诊人
+				if (personInfoData.name == '') {
+					return uni.showToast({
+						title: '请选择就诊人',
+						duration: 1000,
+						icon: ''
+					});
+				}
+
+				// 尊享陪诊
+				if (serviceData.stype == '15') {
+					// 校验 接送地址
+					if (!orderData.receiveAddress) {
+						return uni.showToast({
+							title: '请填写接送地址',
+							duration: 1000,
+							icon: ''
+						});
+					}
+				}
+				orderData.client = personInfoData // 就诊人
+			}
+		}
+
+		// ------------  共用的字段 ---------------
+		// 校验联系电话
+		if (!order.tel) {
+			return uni.showToast({
+				title: '请填写联系电话',
+				duration: 1000,
+				icon: ''
+			})
+		}
+
+		orderData.service_code = serviceData.code // 服务code
+		orderData.service_id = serviceData.id // 服务id
+		orderData.service_name = serviceData.name // 服务名称
+		orderData.service_stype = serviceData.stype // 服务类型
+
+		console.log(orderData, '提交订单的数据');
+	}
 </script>
 
 <style>

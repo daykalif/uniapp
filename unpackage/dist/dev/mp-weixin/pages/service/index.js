@@ -127,6 +127,88 @@ const _sfc_main = {
     const onXieyiChange = () => {
       is_xieyi.value = !is_xieyi.value;
     };
+    let orderData;
+    const submit = () => {
+      if (!is_xieyi.value) {
+        return common_vendor.index.showToast({
+          title: "请您阅读并同意<用户协议>和服务协议",
+          duration: 1e3,
+          icon: ""
+        });
+      }
+      orderData = common_vendor.toRaw(order);
+      const serviceData = common_vendor.toRaw(service.value);
+      const personInfoData = common_vendor.toRaw(personInfo.value);
+      const hospitalsData = common_vendor.toRaw(hospitals.value);
+      common_vendor.index.__f__("log", "at pages/service/index.vue:404", "serviceData--->", serviceData);
+      if (serviceData) {
+        if (serviceData.stype < 100) {
+          if (hospital_index.value == 0) {
+            return common_vendor.index.showToast({
+              title: "请选择医院",
+              duration: 1e3,
+              icon: ""
+            });
+          }
+          orderData.hospital_id = hospitalsData[hospital_index.value].id;
+          orderData.hospital_name = hospitalsData[hospital_index.value].name;
+        }
+        if (serviceData.stype == "30" || serviceData.stype == "40") {
+          if (orderData.starttime == 0) {
+            return common_vendor.index.showToast({
+              title: "请选择服务时间",
+              duration: 1e3,
+              icon: ""
+            });
+          }
+          if (!orderData.address.userName) {
+            return common_vendor.index.showToast({
+              title: "请选择收件信息",
+              duration: 1e3,
+              icon: ""
+            });
+          }
+        }
+        if (serviceData.stype == "10" || serviceData.stype == "15" || serviceData.stype == "20") {
+          if (orderData.starttime == 0) {
+            return common_vendor.index.showToast({
+              title: "请选择就诊时间",
+              duration: 1e3,
+              icon: ""
+            });
+          }
+          if (personInfoData.name == "") {
+            return common_vendor.index.showToast({
+              title: "请选择就诊人",
+              duration: 1e3,
+              icon: ""
+            });
+          }
+          if (serviceData.stype == "15") {
+            if (!orderData.receiveAddress) {
+              return common_vendor.index.showToast({
+                title: "请填写接送地址",
+                duration: 1e3,
+                icon: ""
+              });
+            }
+          }
+          orderData.client = personInfoData;
+        }
+      }
+      if (!order.tel) {
+        return common_vendor.index.showToast({
+          title: "请填写联系电话",
+          duration: 1e3,
+          icon: ""
+        });
+      }
+      orderData.service_code = serviceData.code;
+      orderData.service_id = serviceData.id;
+      orderData.service_name = serviceData.name;
+      orderData.service_stype = serviceData.stype;
+      common_vendor.index.__f__("log", "at pages/service/index.vue:492", orderData, "提交订单的数据");
+    };
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_assets._imports_0$1,
@@ -183,7 +265,7 @@ const _sfc_main = {
         N: common_vendor.t(order.price)
       } : {}, {
         O: common_vendor.n("btnp " + (is_xieyi.value ? "" : "btnp-disabled")),
-        P: common_vendor.o((...args) => _ctx.submit && _ctx.submit(...args))
+        P: common_vendor.o(submit)
       });
     };
   }
