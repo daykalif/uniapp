@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const common_assets = require("../../common/assets.js");
 if (!Array) {
   const _easycom_navbar2 = common_vendor.resolveComponent("navbar");
   _easycom_navbar2();
@@ -11,17 +12,17 @@ if (!Math) {
 const _sfc_main = {
   __name: "index",
   setup(__props) {
-    const navigatorTo = () => {
-      common_vendor.index.navigateTo({
-        url: "/pages/search/index"
-      });
-    };
+    const app = getApp();
+    common_vendor.onLoad(() => {
+      app.globalData.utils.getUserInfo();
+    });
     return (_ctx, _cache) => {
       return {
         a: common_vendor.p({
           isHome: true
         }),
-        b: common_vendor.o(navigatorTo)
+        b: common_assets._imports_0,
+        c: common_assets._imports_1
       };
     };
   }
