@@ -344,7 +344,7 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_assets._imports_0$2,
+        a: common_assets._imports_0$3,
         b: service.value.icon_image ? service.value.icon_image_url : "../../static/resource/images/avatar.jpg",
         c: common_vendor.t(service.value.name),
         d: common_vendor.o(handleServiceTap),
@@ -415,7 +415,7 @@ const _sfc_main = {
           ["is-mask-click"]: false,
           ["background-color"]: "#fff"
         }),
-        aa: common_assets._imports_1,
+        aa: common_assets._imports_0$1,
         ab: common_vendor.o(closeQRCodePopup),
         ac: common_vendor.sr(QRCodePopup, "fcb1e878-3", {
           "k": "QRCodePopup"

@@ -38,7 +38,9 @@
 		{
 			"path": "pages/hospital/index",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{

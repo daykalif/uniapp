@@ -41,7 +41,7 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return {
-        a: common_assets._imports_0$3,
+        a: common_assets._imports_0$5,
         b: common_vendor.t(title.value),
         c: common_vendor.f(list, (item, k0, i0) => {
           return {

@@ -34,7 +34,8 @@ const _sfc_main = {
       default: false
     }
   },
-  setup(__props) {
+  emits: ["navBarAttached"],
+  setup(__props, { emit: __emit }) {
     const props = __props;
     const status = common_vendor.ref(0);
     const navHeight = common_vendor.ref(0);
@@ -61,9 +62,17 @@ const _sfc_main = {
       textStyle.value = ["color:" + props.color, "font-size:" + props.fontSize + "rpx"].join(";");
       iconStyle.value = ["width:" + props.iconWidth + "rpx", "height:" + props.iconHeight + "rpx"].join(";");
     };
+    const emits = __emit;
     common_vendor.onBeforeMount(() => {
       setNavSize();
       setStyle();
+      emits("navBarAttached", {
+        detail: {
+          statusHeight: status.value,
+          navHeight: navHeight.value,
+          navBarHeight: status.value + navHeight.value
+        }
+      });
     });
     const backHome = () => {
       if (pages.value > 1) {
@@ -84,9 +93,9 @@ const _sfc_main = {
       } : common_vendor.e({
         e: pages.value > 1
       }, pages.value > 1 ? {
-        f: common_assets._imports_0$4
+        f: common_assets._imports_0$6
       } : {
-        g: common_assets._imports_1$1
+        g: common_assets._imports_1
       }, {
         h: common_vendor.o(backHome),
         i: __props.titleText

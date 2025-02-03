@@ -96,7 +96,6 @@
 	// 获取胶囊的信息
 	const menu = reactive(uni.getMenuButtonBoundingClientRect())
 
-
 	// 计算状态栏高度
 	const setNavSize = () => {
 		const {
@@ -121,10 +120,19 @@
 		iconStyle.value = ['width:' + props.iconWidth + 'rpx', 'height:' + props.iconHeight + 'rpx'].join(';')
 	}
 
+	const emits = defineEmits(['navBarAttached'])
+
 	// 页面渲染前执行
 	onBeforeMount(() => {
 		setNavSize();
 		setStyle();
+		emits('navBarAttached', {
+			detail: {
+				statusHeight: status.value,
+				navHeight: navHeight.value,
+				navBarHeight: status.value + navHeight.value,
+			}
+		})
 	});
 
 	// 返回按钮

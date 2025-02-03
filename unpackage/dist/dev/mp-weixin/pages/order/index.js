@@ -171,7 +171,7 @@ const _sfc_main = {
       }, list.value != null ? common_vendor.e({
         l: list.value != null && list.value.length == 0
       }, list.value != null && list.value.length == 0 ? {
-        m: common_assets._imports_0$1
+        m: common_assets._imports_0$2
       } : {
         n: common_vendor.f(list.value, (item, index, i0) => {
           return common_vendor.e({

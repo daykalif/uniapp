@@ -68,7 +68,7 @@ const _sfc_main = {
           isHome: true
         }),
         b: common_assets._imports_0,
-        c: common_assets._imports_1,
+        c: common_assets._imports_0$1,
         d: bannerList.value && bannerList.value.length > 0
       }, bannerList.value && bannerList.value.length > 0 ? {
         e: common_vendor.f(bannerList.value, (item, index, i0) => {

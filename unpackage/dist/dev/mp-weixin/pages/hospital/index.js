@@ -1,14 +1,93 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const _sfc_main = {
-  data() {
-    return {};
-  },
-  methods: {}
-};
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return {};
+const common_assets = require("../../common/assets.js");
+if (!Array) {
+  const _easycom_navbar2 = common_vendor.resolveComponent("navbar");
+  const _easycom_share2 = common_vendor.resolveComponent("share");
+  (_easycom_navbar2 + _easycom_share2)();
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render]]);
-wx.createPage(MiniProgramPage);
+const _easycom_navbar = () => "../../components/navbar/navbar.js";
+const _easycom_share = () => "../../components/share/share.js";
+if (!Math) {
+  (_easycom_navbar + _easycom_share)();
+}
+const _sfc_main = {
+  __name: "index",
+  setup(__props) {
+    const app = getApp();
+    const hospital = common_vendor.ref({});
+    const services = common_vendor.ref({});
+    const clone_shareModal = common_vendor.ref(false);
+    const navBarHeight = common_vendor.ref("");
+    const onNavBarAttached = (e) => {
+      navBarHeight.value = e.detail.navBarHeight;
+    };
+    common_vendor.onLoad((option) => {
+      getHospitalDetail(option.hid);
+    });
+    const getHospitalDetail = (hid) => {
+      app.globalData.utils.request({
+        url: "/Hospital/index",
+        method: "GET",
+        data: {
+          hid
+        },
+        success: (res) => {
+          hospital.value = res.data.hospital;
+          services.value = res.data.services;
+        },
+        fail: (res) => {
+          common_vendor.index.__f__("log", "at pages/hospital/index.vue:122", res);
+        }
+      });
+    };
+    const toService = (id) => {
+      common_vendor.index.navigateTo({
+        url: "../service/index?hid=" + hospital.value.id + "&svid=" + id
+      });
+    };
+    const showShareModal = () => {
+      clone_shareModal.value = !clone_shareModal.value;
+    };
+    return (_ctx, _cache) => {
+      return {
+        a: common_vendor.o(onNavBarAttached),
+        b: common_vendor.p({
+          ["title-text"]: "",
+          isHeight: false,
+          isWhite: true,
+          background: "none"
+        }),
+        c: hospital.value.avatar_url,
+        d: hospital.value.avatar_url,
+        e: common_vendor.t(hospital.value.name),
+        f: common_vendor.t(hospital.value.rank),
+        g: common_vendor.t(hospital.value.label),
+        h: common_vendor.o(showShareModal),
+        i: common_assets._imports_0$4,
+        j: common_vendor.t(hospital.value.city),
+        k: common_vendor.t(hospital.value.district),
+        l: common_vendor.t(hospital.value.address),
+        m: common_vendor.f(services.value, (item, index, i0) => {
+          return common_vendor.e({
+            a: item.use_switch == 1
+          }, item.use_switch == 1 ? {
+            b: item.logo_image ? item.logo_image_url : "../../resource/images/avatar.jpg",
+            c: common_vendor.t(item.name),
+            d: common_vendor.t(item.intro),
+            e: common_vendor.t(item.price)
+          } : {}, {
+            f: common_vendor.o(($event) => toService(item.id), index),
+            g: index
+          });
+        }),
+        n: common_vendor.s("position:absolute;top:" + navBarHeight.value + "rpx;padding-top:65rpx;overflow:hidden;width:100%;"),
+        o: common_vendor.p({
+          shareModal: clone_shareModal.value
+        })
+      };
+    };
+  }
+};
+wx.createPage(_sfc_main);
 //# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/hospital/index.js.map
