@@ -5,7 +5,8 @@
 			<image :src="hospital.avatar_url" mode="aspectFill"
 				style="filter: blur(50rpx) brightness(0.8); display: block; width: 100%; height: 550rpx; overflow: hidden">
 			</image>
-			<view :style="'position:absolute;top:' + navBarHeight + 'rpx;padding-top:65rpx;overflow:hidden;width:100%;'">
+			<view
+				:style="'position:absolute;top:' + navBarHeight + 'rpx;padding-top:65rpx;overflow:hidden;width:100%;'">
 				<view class="hospital-hd">
 					<view class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="showShareModal">
 						<view class="weui-cell__hd">
@@ -25,7 +26,7 @@
 						</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"><text class="f4">转发</text></view>
 					</view>
-					<view class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+					<view class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="toMap">
 						<view class="weui-cell__hd">
 							<image src="/static/resource/images/ic_address.png" mode="aspectFill"
 								style="margin-right: 10rpx; display: block; width: 40rpx; height: 40rpx"></image>
@@ -135,6 +136,39 @@
 	// 显示转发弹框
 	const showShareModal = () => {
 		clone_shareModal.value = !clone_shareModal.value
+	}
+
+	// 打开导航的功能【开启导航功能需要在pages.json中开启plugins，当前仅支持企业appId】
+	const toMap = () => {
+		// 1.获取医院坐标
+		const point = bMapTransQQMap(hospital.value.lng, hospital.value.lat);
+		const {
+			qmap_key: key
+		} = uni.getStorageSync('cfg');
+		const referer = app.globalData.name;
+		const endPoint = JSON.stringify({
+			name: hospital.value.name,
+			latitude: point.lat,
+			longitude: point.lng,
+		});
+		uni.navigateTo({
+			url: 'plugin://routePlan/index?key=' + key + '&referer=' + referer + '&endPoint=' + endPoint +
+				'&navigation=1'
+		})
+	}
+
+	const bMapTransQQMap = (lng, lat) => {
+		let x_pi = 3.14159265358979324 * 3000.0 / 180.0;
+		let x = lng - 0.0065;
+		let y = lat - 0.006;
+		let z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
+		let theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
+		let lngs = z * Math.cos(theta);
+		let lats = z * Math.sin(theta);
+		return {
+			lng: lngs,
+			lat: lats
+		}
 	}
 </script>
 

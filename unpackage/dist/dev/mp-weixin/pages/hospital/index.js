@@ -37,7 +37,7 @@ const _sfc_main = {
           services.value = res.data.services;
         },
         fail: (res) => {
-          common_vendor.index.__f__("log", "at pages/hospital/index.vue:122", res);
+          common_vendor.index.__f__("log", "at pages/hospital/index.vue:123", res);
         }
       });
     };
@@ -48,6 +48,34 @@ const _sfc_main = {
     };
     const showShareModal = () => {
       clone_shareModal.value = !clone_shareModal.value;
+    };
+    const toMap = () => {
+      const point = bMapTransQQMap(hospital.value.lng, hospital.value.lat);
+      const {
+        qmap_key: key
+      } = common_vendor.index.getStorageSync("cfg");
+      const referer = app.globalData.name;
+      const endPoint = JSON.stringify({
+        name: hospital.value.name,
+        latitude: point.lat,
+        longitude: point.lng
+      });
+      common_vendor.index.navigateTo({
+        url: "plugin://routePlan/index?key=" + key + "&referer=" + referer + "&endPoint=" + endPoint + "&navigation=1"
+      });
+    };
+    const bMapTransQQMap = (lng, lat) => {
+      let x_pi = 3.141592653589793 * 3e3 / 180;
+      let x = lng - 65e-4;
+      let y = lat - 6e-3;
+      let z = Math.sqrt(x * x + y * y) - 2e-5 * Math.sin(y * x_pi);
+      let theta = Math.atan2(y, x) - 3e-6 * Math.cos(x * x_pi);
+      let lngs = z * Math.cos(theta);
+      let lats = z * Math.sin(theta);
+      return {
+        lng: lngs,
+        lat: lats
+      };
     };
     return (_ctx, _cache) => {
       return {
@@ -68,7 +96,8 @@ const _sfc_main = {
         j: common_vendor.t(hospital.value.city),
         k: common_vendor.t(hospital.value.district),
         l: common_vendor.t(hospital.value.address),
-        m: common_vendor.f(services.value, (item, index, i0) => {
+        m: common_vendor.o(toMap),
+        n: common_vendor.f(services.value, (item, index, i0) => {
           return common_vendor.e({
             a: item.use_switch == 1
           }, item.use_switch == 1 ? {
@@ -81,8 +110,8 @@ const _sfc_main = {
             g: index
           });
         }),
-        n: common_vendor.s("position:absolute;top:" + navBarHeight.value + "rpx;padding-top:65rpx;overflow:hidden;width:100%;"),
-        o: common_vendor.p({
+        o: common_vendor.s("position:absolute;top:" + navBarHeight.value + "rpx;padding-top:65rpx;overflow:hidden;width:100%;"),
+        p: common_vendor.p({
           shareModal: clone_shareModal.value
         })
       };

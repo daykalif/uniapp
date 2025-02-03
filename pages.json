@@ -98,5 +98,11 @@
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
+	// "plugins": {
+	// 	"routePlan": {
+	// 		"version": "1.0.19",
+	// 		"provider": "wx16ed4e0dc3c11b15"
+	// 	}
+	// },
 	"uniIdRouter": {}
 }
