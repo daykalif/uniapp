@@ -16,9 +16,9 @@
 		onHide: function() {
 			console.log('App Hide')
 		},
-		// 注册公共的工具函数
 		globalData: {
-			utils: Utils
+			utils: Utils, // 注册公共的工具函数
+			filt: '', // 全局变量
 		}
 	}
 </script>

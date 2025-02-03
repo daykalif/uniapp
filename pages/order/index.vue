@@ -4,12 +4,17 @@
 		<view style="width: 100%; border-bottom: 0 none; position: fixed; z-index: 2">
 			<view style="background: #ffffff; position: relative">
 				<view class="h-tab vp-flex">
-					<view :class="'h-tab-item vp-flex_1 ' + (filt == '' ? 'on' : '')" @tap="onFilterChange('')">全部
+					<view :class="'h-tab-item vp-flex_1 ' + (filt == '' ? 'on' : '')" data-filt=""
+						@tap="onFilterChange('')">全部
 					</view>
-					<view :class="'h-tab-item vp-flex_1 ' + (filt == 1 ? 'on' : '')" @tap="onFilterChange(1)">待支付</view>
-					<view :class="'h-tab-item vp-flex_1 ' + (filt == 2 ? 'on' : '')" @tap="onFilterChange(2)">待服务</view>
-					<view :class="'h-tab-item vp-flex_1 ' + (filt == 3 ? 'on' : '')" @tap="onFilterChange(3)">已完成</view>
-					<view :class="'h-tab-item vp-flex_1 ' + (filt == 4 ? 'on' : '')" @tap="onFilterChange(4)">已取消</view>
+					<view :class="'h-tab-item vp-flex_1 ' + (filt == 1 ? 'on' : '')" data-filt="1"
+						@tap="onFilterChange(1)">待支付</view>
+					<view :class="'h-tab-item vp-flex_1 ' + (filt == 2 ? 'on' : '')" data-filt="2"
+						@tap="onFilterChange(2)">待服务</view>
+					<view :class="'h-tab-item vp-flex_1 ' + (filt == 3 ? 'on' : '')" data-filt="3"
+						@tap="onFilterChange(3)">已完成</view>
+					<view :class="'h-tab-item vp-flex_1 ' + (filt == 4 ? 'on' : '')" data-filt="4"
+						@tap="onFilterChange(4)">已取消</view>
 				</view>
 			</view>
 		</view>
@@ -99,7 +104,6 @@
 			</view>
 		</block>
 
-
 		<!-- 手机登录弹窗 -->
 		<uni-popup ref="popup" type="center" :is-mask-click="false" background-color="#fff">
 			<view class="popup-content">
@@ -108,7 +112,9 @@
 				</view>
 				<view class="group">
 					<input class="uni-input" v-model="validMobile.validCode" placeholder="请输入验证码" />
-					<text class="valid-text" @click="countdownChange">{{countdown.validText}}</text>
+					<text class="valid-text" @click="countdownChange">{{
+            countdown.validText
+          }}</text>
 				</view>
 			</view>
 			<view class="btns">
@@ -120,178 +126,185 @@
 </template>
 
 <script setup>
-	import UQRCode from 'uqrcodejs';
+	import UQRCode from "uqrcodejs";
 	import {
 		ref,
 		reactive,
 		computed,
 		toRaw,
 		onMounted
-	} from "vue"
-	const app = getApp() // 获取uniapp实例
-	const filt = ref('') // tab标志
-	const list = ref([]) // 订单列表
-	const popup = ref(null) // 登录弹框
-	const validMobile = ref({ // 
-		validCode: '', // 验证码
-		phone: '' // 手机号
-	})
+	} from "vue";
+	import {
+		onShow
+	} from '@dcloudio/uni-app';
+
+	const app = getApp(); // 获取uniapp实例
+	const filt = ref(""); // tab标志
+	const list = ref([]); // 订单列表
+	const popup = ref(null); // 登录弹框
+	const validMobile = ref({
+		//
+		validCode: "", // 验证码
+		phone: "", // 手机号
+	});
 	// 验证码
 	const countdown = ref({
-		validText: '获取验证码',
+		validText: "获取验证码",
 		time: 60, // 倒计时
-	})
+	});
 
 	onMounted(() => {
-		console.log(app.globalData.filt, ' app.globalData.filt');
 		// 获取从个人中心保存到全局的订单状态值
-		filt.value = app.globalData.filt
-		getOrderList()
-	})
+		filt.value = app.globalData.filt;
+		getOrderList();
+	});
+
+	onShow(() => {
+		filt.value = app.globalData.filt;
+		getOrderList();
+	});
 
 	// 切换tab栏
 	const onFilterChange = (status) => {
-		if (filt.value == status) return
-		filt.value = status // 将选中的tab标识赋值给选中标识，用于页面样式的切换
-		getOrderList(status)
-	}
+		if (filt.value == status) return;
+		filt.value = status; // 将选中的tab标识赋值给选中标识，用于页面样式的切换
+		getOrderList(status);
+	};
 
 	// 获取订单列表
 	const getOrderList = () => {
 		// 如果用户没登录就弹框手机验证码登录
-		if (!uni.getStorageSync('token')) {
-			return popup.value.open('center')
+		if (!uni.getStorageSync("token")) {
+			return popup.value.open("center");
 		}
 
 		app.globalData.utils.request({
-			url: '/order/list',
-			method: 'GET',
+			url: "/order/list",
+			method: "GET",
 			header: {
-				token: uni.getStorageSync('token')
+				token: uni.getStorageSync("token"),
 			},
 			data: {
-				state: filt.value
+				state: filt.value,
 			},
-			success: res => {
-				list.value = res.data
-				console.log(res.data, 'res');
+			success: (res) => {
+				list.value = res.data;
+				console.log(res.data, "res");
 			},
-			fail: res => {
-				console.log(res, 'res');
-			}
-		})
-	}
+			fail: (res) => {
+				console.log(res, "res");
+			},
+		});
+	};
 	// 倒计时结束重新获取订单列表
 	const onCounterOver = () => {
-		filt.value = ''
-		getOrderList()
-	}
+		filt.value = "";
+		getOrderList();
+	};
 
 	// 去订单详情
 	const toOrder = (id) => {
 		uni.navigateTo({
-			url: `./orderDetail/index?oid=${id}`
-		})
-	}
-
+			url: `./orderDetail/index?oid=${id}`,
+		});
+	};
 
 	// 登录
-	let flag = false // 做防抖
+	let flag = false; // 做防抖
 	const countdownChange = () => {
-
 		// 校验 手机号
 		if (!validMobile.value.phone) {
 			return uni.showToast({
-				title: '请输入手机号',
+				title: "请输入手机号",
 				duration: 1000,
-				icon: 'none'
-			})
+				icon: "none",
+			});
 		}
 
 		// 1.如果flag还开着,带着有定时器,那么直接return出去
-		if (flag) return
+		if (flag) return;
 		// 2.进来就打开
-		flag = true
+		flag = true;
 		// 3.开启定时器
 		const timer = setInterval(() => {
 			if (countdown.value.time <= 0) {
-				countdown.value.validText = '获取验证码'
-				countdown.value.time = 60
-				clearInterval(timer)
+				countdown.value.validText = "获取验证码";
+				countdown.value.time = 60;
+				clearInterval(timer);
 				// 时间走完要关闭
-				flag = false
+				flag = false;
 			} else {
-				countdown.value.time -= 1
-				countdown.value.validText = `剩余${countdown.value.time}S`
+				countdown.value.time -= 1;
+				countdown.value.validText = `剩余${countdown.value.time}S`;
 			}
-		}, 1000)
+		}, 1000);
 
 		// 获取验证码
 		app.globalData.utils.request({
-			url: '/get/code',
-			method: 'POST',
+			url: "/get/code",
+			method: "POST",
 			data: {
-				tel: validMobile.value.phone // 手机号
+				tel: validMobile.value.phone, // 手机号
 			},
-			success: res => {
+			success: (res) => {
 				uni.showToast({
-					title: '验证码发送成功,请尽快验证!',
+					title: "验证码发送成功,请尽快验证!",
 					duration: 1000,
-					icon: 'none'
-				})
+					icon: "none",
+				});
 			},
-			fail: res => {
+			fail: (res) => {
 				uni.showToast({
 					title: res.msg,
 					duration: 1000,
-					icon: 'none'
-				})
-			}
-		})
-	}
+					icon: "none",
+				});
+			},
+		});
+	};
 
 	// 取消弹窗
 	const cancal = () => {
-		popup.value.close() // 关闭弹窗
-	}
+		popup.value.close(); // 关闭弹窗
+	};
 
 	// 确认弹窗
 	const ok = () => {
 		// 如果手机号为空 或 验证码为空,则提示用户
 		if (!validMobile.value.phone || !validMobile.value.validCode) {
 			return uni.showToast({
-				title: '请检查输入信息',
+				title: "请检查输入信息",
 				duration: 1000,
-				icon: 'none'
-			})
+				icon: "none",
+			});
 		}
-		// 验证码验证,正式登录  
+		// 验证码验证,正式登录
 		app.globalData.utils.request({
-			url: '/user/authentication',
-			method: 'POST',
+			url: "/user/authentication",
+			method: "POST",
 			data: {
 				tel: validMobile.value.phone, // 手机号
-				code: validMobile.value.validCode // 验证码
+				code: validMobile.value.validCode, // 验证码
 			},
 			success: (res) => {
 				// 登录成功将token设置到缓存中
-				uni.setStorageSync('token', res.data.token)
-				popup.value.close() // 关闭弹窗
+				uni.setStorageSync("token", res.data.token);
+				popup.value.close(); // 关闭弹窗
 				// 接下来获取订单列表
-				getOrderList()
+				getOrderList();
 			},
 			fail: (res) => {
-				popup.value.close() // 关闭弹窗
+				popup.value.close(); // 关闭弹窗
 				uni.showToast({
 					title: res.msg,
 					duration: 1000,
-					icon: 'none'
-				})
-			}
-		})
-	}
+					icon: "none",
+				});
+			},
+		});
+	};
 </script>
 
 <style>
-	@import "./index.css"
+	@import "./index.css";
 </style>

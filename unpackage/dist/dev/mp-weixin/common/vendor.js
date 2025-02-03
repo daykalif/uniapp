@@ -7851,6 +7851,7 @@ const createSubpackageApp = initCreateSubpackageApp();
 const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
   !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
 };
+const onShow = /* @__PURE__ */ createHook(ON_SHOW);
 const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
@@ -8528,6 +8529,7 @@ exports.o = o;
 exports.onBeforeMount = onBeforeMount;
 exports.onLoad = onLoad;
 exports.onMounted = onMounted;
+exports.onShow = onShow;
 exports.p = p;
 exports.reactive = reactive;
 exports.ref = ref;

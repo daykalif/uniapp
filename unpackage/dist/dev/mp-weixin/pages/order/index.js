@@ -21,7 +21,7 @@ const _sfc_main = {
     const list = common_vendor.ref([]);
     const popup = common_vendor.ref(null);
     const validMobile = common_vendor.ref({
-      // 
+      //
       validCode: "",
       // 验证码
       phone: ""
@@ -33,7 +33,10 @@ const _sfc_main = {
       // 倒计时
     });
     common_vendor.onMounted(() => {
-      common_vendor.index.__f__("log", "at pages/order/index.vue:146", app.globalData.filt, " app.globalData.filt");
+      filt.value = app.globalData.filt;
+      getOrderList();
+    });
+    common_vendor.onShow(() => {
       filt.value = app.globalData.filt;
       getOrderList();
     });
@@ -58,10 +61,10 @@ const _sfc_main = {
         },
         success: (res) => {
           list.value = res.data;
-          common_vendor.index.__f__("log", "at pages/order/index.vue:177", res.data, "res");
+          common_vendor.index.__f__("log", "at pages/order/index.vue:192", res.data, "res");
         },
         fail: (res) => {
-          common_vendor.index.__f__("log", "at pages/order/index.vue:180", res, "res");
+          common_vendor.index.__f__("log", "at pages/order/index.vue:195", res, "res");
         }
       });
     };

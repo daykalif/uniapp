@@ -92,7 +92,7 @@ const _sfc_main = {
         f: common_vendor.t(hospital.value.rank),
         g: common_vendor.t(hospital.value.label),
         h: common_vendor.o(showShareModal),
-        i: common_assets._imports_0$4,
+        i: common_assets._imports_0$5,
         j: common_vendor.t(hospital.value.city),
         k: common_vendor.t(hospital.value.district),
         l: common_vendor.t(hospital.value.address),

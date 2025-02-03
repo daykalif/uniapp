@@ -29,9 +29,11 @@ const _sfc_main = {
   onHide: function() {
     common_vendor.index.__f__("log", "at App.vue:17", "App Hide");
   },
-  // 注册公共的工具函数
   globalData: {
-    utils: common_js_utils.Utils
+    utils: common_js_utils.Utils,
+    // 注册公共的工具函数
+    filt: ""
+    // 全局变量
   }
 };
 const Component = () => "./mycomponents/component.js";
