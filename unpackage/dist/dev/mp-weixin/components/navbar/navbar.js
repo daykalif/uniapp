@@ -84,7 +84,7 @@ const _sfc_main = {
       } : common_vendor.e({
         e: pages.value > 1
       }, pages.value > 1 ? {
-        f: common_assets._imports_0$3
+        f: common_assets._imports_0$4
       } : {
         g: common_assets._imports_1$1
       }, {

@@ -5,6 +5,7 @@ const common_js_utils = require("./common/js/utils.js");
 if (!Math) {
   "./pages/index/index.js";
   "./pages/order/index.js";
+  "./pages/order/orderDetail/index.js";
   "./pages/user/index.js";
   "./pages/search/index.js";
   "./pages/hospital/index.js";

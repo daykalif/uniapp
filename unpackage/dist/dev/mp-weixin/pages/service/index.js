@@ -59,6 +59,7 @@ const _sfc_main = {
       time: 60
       // 倒计时
     });
+    const QRCodePopup = common_vendor.ref(null);
     common_vendor.onLoad((option) => {
       getServiceDetail(option);
     });
@@ -131,10 +132,10 @@ const _sfc_main = {
           order.address.cityName = cityName;
           order.address.countyName = countyName;
           order.address.detailInfo = detailInfo;
-          common_vendor.index.__f__("log", "at pages/service/index.vue:407", res, "res");
+          common_vendor.index.__f__("log", "at pages/service/index.vue:424", res, "res");
         },
         fail: (err) => {
-          common_vendor.index.__f__("log", "at pages/service/index.vue:410", err, "err");
+          common_vendor.index.__f__("log", "at pages/service/index.vue:427", err, "err");
         }
       });
     };
@@ -154,7 +155,7 @@ const _sfc_main = {
       const serviceData = common_vendor.toRaw(service.value);
       const personInfoData = common_vendor.toRaw(personInfo.value);
       const hospitalsData = common_vendor.toRaw(hospitals.value);
-      common_vendor.index.__f__("log", "at pages/service/index.vue:438", "serviceData--->", serviceData);
+      common_vendor.index.__f__("log", "at pages/service/index.vue:455", "serviceData--->", serviceData);
       if (serviceData) {
         if (serviceData.stype < 100) {
           if (hospital_index.value == 0) {
@@ -221,7 +222,7 @@ const _sfc_main = {
       orderData.service_id = serviceData.id;
       orderData.service_name = serviceData.name;
       orderData.service_stype = serviceData.stype;
-      common_vendor.index.__f__("log", "at pages/service/index.vue:526", orderData, "提交订单的数据");
+      common_vendor.index.__f__("log", "at pages/service/index.vue:543", orderData, "提交订单的数据");
       if (!common_vendor.index.getStorageSync("token")) {
         popup.value.open("center");
       } else {
@@ -309,9 +310,41 @@ const _sfc_main = {
         }
       });
     };
+    const createOrder = (params) => {
+      QRCodePopup.value.open("center");
+      app.globalData.utils.request({
+        url: "/pay/createOrder",
+        method: "POST",
+        header: {
+          token: common_vendor.index.getStorageSync("token")
+        },
+        data: params,
+        success: (res) => {
+          formatWXPayToQRCode(res.wx_code);
+        },
+        fail: (res) => {
+          common_vendor.index.__f__("log", "at pages/service/index.vue:676", res);
+        }
+      });
+    };
+    const formatWXPayToQRCode = (url) => {
+      var qr = new common_vendor.UQRCode();
+      qr.data = url;
+      qr.size = 200;
+      qr.make();
+      var canvasContext = common_vendor.index.createCanvasContext("qrcode");
+      qr.canvasContext = canvasContext;
+      qr.drawCanvas();
+    };
+    const closeQRCodePopup = () => {
+      QRCodePopup.value.close();
+      common_vendor.index.switchTab({
+        url: "../order/index"
+      });
+    };
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_assets._imports_0$1,
+        a: common_assets._imports_0$2,
         b: service.value.icon_image ? service.value.icon_image_url : "../../static/resource/images/avatar.jpg",
         c: common_vendor.t(service.value.name),
         d: common_vendor.o(handleServiceTap),
@@ -378,6 +411,16 @@ const _sfc_main = {
           "k": "popup"
         }),
         Z: common_vendor.p({
+          type: "center",
+          ["is-mask-click"]: false,
+          ["background-color"]: "#fff"
+        }),
+        aa: common_assets._imports_1,
+        ab: common_vendor.o(closeQRCodePopup),
+        ac: common_vendor.sr(QRCodePopup, "fcb1e878-3", {
+          "k": "QRCodePopup"
+        }),
+        ad: common_vendor.p({
           type: "center",
           ["is-mask-click"]: false,
           ["background-color"]: "#fff"

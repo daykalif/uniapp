@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/order/index",
+    "pages/order/orderDetail/index",
     "pages/user/index",
     "pages/search/index",
     "pages/hospital/index",
