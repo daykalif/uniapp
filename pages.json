@@ -10,7 +10,14 @@
 		{
 			"path": "pages/order/index",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "订单列表",
+				"navigationBarBackgroundColor": "#FFFFFF"
+			}
+		},
+		{
+			"path": "pages/order/orderDetail/index",
+			"style": {
+				"navigationBarTitleText": "订单详情",
 				"navigationBarBackgroundColor": "#FFFFFF"
 			}
 		},
